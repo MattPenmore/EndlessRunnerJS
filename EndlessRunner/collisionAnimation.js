@@ -7,7 +7,7 @@ export class CollisionAnimation
         this.spriteWidth = 100;
         this.spriteHeight = 90;
         this.sizeModifier = Math.random() + 0.5;
-        this.height = 18 * this.sizeModifier;
+        this.height = 0.18 * this.sizeModifier;
         this.width = this.height * this.spriteWidth / this.spriteHeight;
         this.x = x - this.width * 0.5;
         this.y = y - this.height * 0.5;
@@ -17,10 +17,12 @@ export class CollisionAnimation
         this.fps = Math.random() * 10 + 5;
         this.frameInterval = 1000/this.fps;
         this.frameTimer = 0;
+        this.pixelX = this.x * this.game.canvasHeight + this.game.xCenter;
+        this.pixelY = this.y * this.game.canvasHeight + this.game.yCenter;
     }
     update(deltaTime)
     {
-        this.x -= this.game.speed * deltaTime / 16;
+        this.x -= this.game.speed * 0.01 * deltaTime / 16;
 
         if(this.frameTimer > this.frameInterval)
         {
@@ -32,10 +34,12 @@ export class CollisionAnimation
         {
             this.frameTimer += deltaTime;
         }
-        
+
+        this.pixelX = this.x * this.game.canvasHeight + this.game.xCenter;
+        this.pixelY = this.y * this.game.canvasHeight + this.game.yCenter;     
     }
-    draw(context,canvas)
+    draw(context)
     {
-        context.drawImage(this.image, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x / 100 * canvas.height + canvas.width / 2, this.y / 100 * canvas.height + canvas.height / 2, canvas.height * this.width / 100, canvas.height * this.height / 100);
+        context.drawImage(this.image, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.pixelX, this.pixelY, this.width * this.game.canvasHeight, this.height * this.game.canvasHeight);
     }
 }

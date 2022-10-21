@@ -27,7 +27,12 @@ window.addEventListener('load', function(){
     class Game {
         constructor()
         {
-            this.groundMargin = 16;
+            //Scalar is number y needs to increase to go from top to bottom of screen.
+            this.canvasHeight = canvas.height;
+            this.xCenter = canvas.width / 2;
+            this.yCenter = canvas.height / 2;
+            this.xhalfWidth = canvas.width / this.canvasHeight / 2;
+            this.groundMargin = 16 / 100;
             this.speed = 0;
             this.maxSpeed = 1;
             this.background = new Background(this);
@@ -40,10 +45,10 @@ window.addEventListener('load', function(){
             this.floatingMessages = [];
             this.enemyTimerFlying = 0;
             this.enemyIntervalFlying = 3000;
-            this.enemyDistanceStatic = 100;
+            this.enemyDistanceStatic = 1;
             this.debug = false;
             this.score = 0;
-            this.winningScore = 5;
+            this.winningScore = 40;
             this.fontColour = 'black';
             this.time = 0;
             this.maxTime = 30000;
@@ -53,11 +58,16 @@ window.addEventListener('load', function(){
             this.player.currentState.enter();
             this.maxParticles = 200;
             
+            
         }
         update(deltaTime)
         {
             if(!game.gameOver)
             {
+                this.canvasHeight = canvas.height;
+                this.yCenter = canvas.height / 2;
+                this.xCenter = canvas.width / 2;
+                this.xhalfWidth = canvas.width / this.canvasHeight / 2;
                 this.time += deltaTime;
                 if (this.time > this.maxTime) this.gameOver = true;
                 this.background.update(deltaTime);
@@ -108,20 +118,20 @@ window.addEventListener('load', function(){
         }
         draw(context)
         {
-            this.background.draw(context, canvas);
-            this.player.draw(context, canvas);
+            this.background.draw(context);
+            this.player.draw(context);
             this.enemies.forEach( enemy => {
-                enemy.draw(context, canvas);
+                enemy.draw(context);
             })
             this.particles.forEach((particle, index) => {
-                particle.draw(context, canvas);
+                particle.draw(context);
                 
             });
             this.collisions.forEach((collision, index) => {
-                collision.draw(context, canvas);
+                collision.draw(context);
             });
             this.floatingMessages.forEach( message => {
-                message.draw(context, canvas);
+                message.draw(context);
             }); 
             this.UI.draw(context,canvas);
         }

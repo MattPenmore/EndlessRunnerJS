@@ -1,7 +1,8 @@
 export class FloatingMessage
 {
-    constructor(value, x, y, targetX, targetY)
+    constructor(value, x, y, targetX, targetY, game)
     {
+        this.game = game;
         this.value = value;
         this.x = x;
         this.y = y;
@@ -12,6 +13,8 @@ export class FloatingMessage
         this.lifeTime = 2000;
         this.fontFamily = 'Helvetica';
         this.fontSize = 0;
+        this.pixelX = this.x * this.game.canvasHeight + this.game.xCenter;
+        this.pixelY = this.y * this.game.canvasHeight + this.game.yCenter;
     }
     update(deltaTime)
     {
@@ -20,16 +23,19 @@ export class FloatingMessage
         this.timer += deltaTime;
 
         if(this.timer > this.lifeTime) this.markedForDeletion = true;
+
+        this.pixelX = this.x * this.game.canvasHeight + this.game.xCenter;
+        this.pixelY = this.y * this.game.canvasHeight + this.game.yCenter;
     }
-    draw(context, canvas)
+    draw(context)
     {
         context.save();
-        this.fontSize = canvas.height / 25;
+        this.fontSize = context.canvas.height / 25;
         context.font = this.fontSize + 'px ' + this.fontFamily;
         context.fillStyle = 'white';
-        context.fillText(this.value, this.x / 100 * canvas.height + canvas.width / 2, this.y / 100 * canvas.height + canvas.height / 2);
+        context.fillText(this.value, this.pixelX, this.pixelY);
         context.fillStyle = 'black';
-        context.fillText(this.value, (this.x - 0.2) / 100 * canvas.height + canvas.width / 2, (this.y - 0.2) / 100 * canvas.height + canvas.height / 2);
+        context.fillText(this.value, this.pixelX - 0.2 * this.game.canvasHeight, this.pixelY - 0.2 * this.game.canvasHeight);
         context.restore();
     }
     

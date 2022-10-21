@@ -1,6 +1,6 @@
 import {Dust, Splash, Fire} from './particles.js';
 
-let jumpVelocity = 300;
+let jumpVelocity = 3;
 
 const states = {
     SITTING: 0,
@@ -191,10 +191,17 @@ export class Diving extends State
         this.game.player.maxFrame = 6;
         this.game.player.frameX = 0;
         this.game.player.frameY = 6;
-        this.game.player.vy = 150;
+        this.game.player.vy = 1.50;
     }
     handleInput(input, deltaTime)
     {
+        this.timeToAnim -= deltaTime;
+        if(this.timeToAnim <= 0)
+        {
+            this.game.particles.unshift(new Fire(this.game, this.game.player.x, this.game.player.y));
+            this.timeToAnim = this.animTime;
+        }
+
         if (this.game.player.onGround())
         {
             if(input.includes('Enter'))
